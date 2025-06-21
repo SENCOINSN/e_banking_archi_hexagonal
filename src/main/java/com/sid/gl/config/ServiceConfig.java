@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfig {
 
     @Bean
-   public CompteService compteService(CompteRepositoryPort compteRepositoryPort) {
-        return new CompteService(compteRepositoryPort);
+   public CompteService compteService(CompteRepositoryPort repository) {
+        return new CompteService(repository);
     }
 
     // Add other service beans as needed

@@ -15,6 +15,6 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     protected Long id;
-    protected LocalDateTime createdDate;
+    protected LocalDateTime createdDate = LocalDateTime.now();
     protected LocalDateTime updatedDate;
 }

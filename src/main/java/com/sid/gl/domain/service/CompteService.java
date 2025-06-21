@@ -1,25 +1,27 @@
 package com.sid.gl.domain.service;
 
 import com.sid.gl.domain.dto.CompteRequestDto;
+import com.sid.gl.domain.dto.DataResponse;
 import com.sid.gl.domain.port.input.CompteServiceUseCase;
 import com.sid.gl.domain.port.output.CompteRepositoryPort;
+import org.springframework.context.annotation.Lazy;
 
-import java.util.List;
 
 public class CompteService implements CompteServiceUseCase {
-   private final CompteRepositoryPort compteRepository;
 
-    public CompteService(CompteRepositoryPort compteRepository) {
-        this.compteRepository = compteRepository;
+   private final CompteRepositoryPort compteRepositoryPort;
+
+    public CompteService(@Lazy CompteRepositoryPort compteRepositoryPort) {
+        this.compteRepositoryPort = compteRepositoryPort;
     }
 
     @Override
     public String createCompte(CompteRequestDto requestDto) {
-        return "";
+        return compteRepositoryPort.createCompte(requestDto);
     }
 
     @Override
-    public List<CompteRequestDto> getAllComptes() {
-        return List.of();
+    public DataResponse getAllComptes(int page,int size) {
+        return compteRepositoryPort.getAllComptes(page,size);
     }
 }
