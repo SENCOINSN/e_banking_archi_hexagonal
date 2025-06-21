@@ -1,11 +1,14 @@
 package com.sid.gl.adapter.output.entities;
 
+import com.sid.gl.adapter.output.enums.OperationStatus;
 import com.sid.gl.adapter.output.enums.TypeOperation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Entity
@@ -28,5 +31,14 @@ public class CompteOperation extends BaseEntity {
     private BigDecimal montantVersement;
 
     private String ribBeneficiaire; // RIB for transfer operations
+    @Enumerated(jakarta.persistence.EnumType.STRING)
+    private OperationStatus status; // Status of the operation (e.g., PENDING, COMPLETED, FAILED)
+    private LocalDateTime dateOperation; // Date and time of the operation
+
+   public CompteOperation(){
+        this.referenceOperation = UUID.randomUUID().toString()
+                .substring(0,12);
+    }
+
 
 }

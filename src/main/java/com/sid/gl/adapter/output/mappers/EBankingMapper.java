@@ -1,10 +1,11 @@
 package com.sid.gl.adapter.output.mappers;
 
 import com.sid.gl.adapter.output.entities.Compte;
+import com.sid.gl.adapter.output.entities.CompteOperation;
 import com.sid.gl.adapter.output.entities.InfosTitulaire;
-import com.sid.gl.domain.dto.CompteRequestDto;
-import com.sid.gl.domain.dto.CompteResponseDto;
-import com.sid.gl.domain.dto.InfosTitulaireResponseDto;
+import com.sid.gl.adapter.output.enums.OperationStatus;
+import com.sid.gl.adapter.output.enums.TypeOperation;
+import com.sid.gl.domain.dto.*;
 
 import java.util.Objects;
 
@@ -55,4 +56,40 @@ public class EBankingMapper {
         }
         return dto;
     }
+
+    public static CompteOperation mapDepotToCompteOperation(DepotRequestDto dto) {
+        CompteOperation operation = new CompteOperation();
+
+        if (Objects.nonNull(dto)) {
+            operation.setTypeOperation(TypeOperation.DEPOT);
+            operation.setStatus(OperationStatus.PENDING);
+        }
+        return operation;
+    }
+
+    public static CompteOperation mapRetraitToCompteOperation(RetraitRequestDto dto) {
+        CompteOperation operation = new CompteOperation();
+
+        if (Objects.nonNull(dto)) {
+            operation.setTypeOperation(TypeOperation.RETRAIT);
+            operation.setStatus(OperationStatus.PENDING);
+        }
+        return operation;
+    }
+
+    public static CompteOperation mapVirementToCompteOperation(VirementRequestDto dto) {
+        CompteOperation operation = new CompteOperation();
+
+        if (Objects.nonNull(dto)) {
+            operation.setTypeOperation(TypeOperation.VIREMENT);
+            operation.setStatus(OperationStatus.PENDING);
+            operation.setRibBeneficiaire(dto.getRibBeneficiaire());
+            operation.setMotifOperation(dto.getMotif());
+            //todo différer le process pour le virement différé
+
+        }
+        return operation;
+    }
+
+
 }
