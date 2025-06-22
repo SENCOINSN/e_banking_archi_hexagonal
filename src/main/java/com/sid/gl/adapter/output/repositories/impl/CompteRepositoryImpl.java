@@ -3,11 +3,13 @@ package com.sid.gl.adapter.output.repositories.impl;
 import com.sid.gl.adapter.output.entities.Compte;
 import com.sid.gl.adapter.output.mappers.EBankingMapper;
 import com.sid.gl.adapter.output.repositories.CompteRepository;
+import com.sid.gl.adapter.output.security.KeycloakUserService;
 import com.sid.gl.domain.dto.CompteRequestDto;
 import com.sid.gl.domain.dto.CompteResponseDto;
 import com.sid.gl.domain.dto.DataResponse;
 import com.sid.gl.domain.port.output.CompteRepositoryPort;
 import com.sid.gl.utils.CompteGenerateur;
+import com.sid.gl.utils.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -15,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -26,12 +28,21 @@ public class CompteRepositoryImpl implements CompteRepositoryPort {
     @Lazy
     private CompteRepository repository;
 
+    @Autowired
+    private KeycloakUserService keycloakUserService;
+
     @Override
     public String createCompte(CompteRequestDto requestDto) {
         Compte compte = EBankingMapper.mapToCompte(requestDto);
         compte.setNumeroCompte(CompteGenerateur.generateNumeroCompte(16));
         compte.setRib(CompteGenerateur.generateRIB());
         Compte savedCompte = repository.save(compte);
+
+        String name = requestDto.getPrenomTitulaire()+" "+requestDto.getNomTitulaire();
+        String email = requestDto.getEmailTitulaire();
+        String password = PasswordGenerator.generatePassword();
+        //create user in keycloak
+        keycloakUserService.createUserCredKeycloak(name,email,password);
         return savedCompte.getNumeroCompte();
     }
 
