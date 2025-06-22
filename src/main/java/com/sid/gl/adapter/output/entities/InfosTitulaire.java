@@ -16,4 +16,5 @@ public class InfosTitulaire {
     private String codePostalTitulaire;
     private String villeTitulaire;
     private String paysTitulaire;
+
 }
