@@ -38,11 +38,12 @@ public class CompteRepositoryImpl implements CompteRepositoryPort {
         compte.setRib(CompteGenerateur.generateRIB());
         Compte savedCompte = repository.save(compte);
 
-        String name = requestDto.getPrenomTitulaire()+" "+requestDto.getNomTitulaire();
+        String firstName = requestDto.getPrenomTitulaire();
+        String lastName = requestDto.getNomTitulaire();
         String email = requestDto.getEmailTitulaire();
         String password = PasswordGenerator.generatePassword();
         //create user in keycloak
-        keycloakUserService.createUserCredKeycloak(name,email,password);
+        keycloakUserService.createUserCredKeycloak(firstName,lastName,email,password);
         return savedCompte.getNumeroCompte();
     }
 
