@@ -1,14 +1,21 @@
 package com.sid.gl.domain.dto;
 
-import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Data
+
 public class DepotRequestDto extends OperationRequestDto {
  private BigDecimal montantDepot;
 
  public DepotRequestDto() {
      super();
  }
+
+    public BigDecimal getMontantDepot() {
+        return montantDepot;
+    }
+
+    public void setMontantDepot(BigDecimal montantDepot) {
+        this.montantDepot = montantDepot;
+    }
 }

@@ -4,6 +4,7 @@ import com.sid.gl.domain.dto.CompteRequestDto;
 import com.sid.gl.domain.dto.DataResponse;
 import com.sid.gl.domain.port.input.CompteServiceUseCase;
 import com.sid.gl.domain.port.output.CompteRepositoryPort;
+import com.sid.gl.exceptions.BadArgumentException;
 import org.springframework.context.annotation.Lazy;
 
 
@@ -16,7 +17,7 @@ public class CompteService implements CompteServiceUseCase {
     }
 
     @Override
-    public String createCompte(CompteRequestDto requestDto) {
+    public String createCompte(CompteRequestDto requestDto) throws BadArgumentException {
         return compteRepositoryPort.createCompte(requestDto);
     }
 
