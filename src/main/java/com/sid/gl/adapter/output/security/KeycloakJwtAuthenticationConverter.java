@@ -8,15 +8,14 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
 
 public class KeycloakJwtAuthenticationConverter  implements Converter<Jwt, AbstractAuthenticationToken> {
+    private static final String CLIENT_ID = "api-paiement-app";
+
     @Override
     public AbstractAuthenticationToken convert(Jwt source) {
         return new JwtAuthenticationToken(
@@ -30,12 +29,14 @@ public class KeycloakJwtAuthenticationConverter  implements Converter<Jwt, Abstr
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         var resourceAccess = new HashMap<>(jwt.getClaim("resource_access"));
 
-        var eternal = (Map<String, List<String>>) resourceAccess.get("account");
+        var eternal = (Map<String, List<String>>) resourceAccess.get(CLIENT_ID);
 
         var roles = eternal.get("roles");
 
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.replace("-", "_")))
+      Set<SimpleGrantedAuthority> rolesSet = roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(toSet());
+
+        return rolesSet;
     }
 }
