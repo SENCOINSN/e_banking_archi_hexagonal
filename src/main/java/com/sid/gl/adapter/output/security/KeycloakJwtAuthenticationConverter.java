@@ -22,8 +22,13 @@ public class KeycloakJwtAuthenticationConverter  implements Converter<Jwt, Abstr
                 source,
                 Stream.concat(new JwtGrantedAuthoritiesConverter().convert(source).stream(),
                                 extractResourceRoles(source).stream())
-                        .collect(toSet())
+                        .collect(toSet()),
+                getClientName(source)
         );
+    }
+
+    private String getClientName(Jwt jwt) {
+        return jwt.getClaim("preferred_username");
     }
 
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
