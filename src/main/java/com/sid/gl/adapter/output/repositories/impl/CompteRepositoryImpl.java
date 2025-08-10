@@ -3,12 +3,14 @@ package com.sid.gl.adapter.output.repositories.impl;
 import com.sid.gl.adapter.output.entities.Compte;
 import com.sid.gl.adapter.output.mappers.EBankingMapper;
 import com.sid.gl.adapter.output.repositories.CompteRepository;
+import com.sid.gl.adapter.output.security.KeycloakUserService;
 import com.sid.gl.domain.dto.CompteRequestDto;
 import com.sid.gl.domain.dto.CompteResponseDto;
 import com.sid.gl.domain.dto.DataResponse;
 import com.sid.gl.domain.port.output.CompteRepositoryPort;
 import com.sid.gl.exceptions.BadArgumentException;
 import com.sid.gl.utils.CompteGenerateur;
+import com.sid.gl.utils.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,9 @@ public class CompteRepositoryImpl implements CompteRepositoryPort {
     @Lazy
     private CompteRepository repository;
 
+    @Autowired
+    private KeycloakUserService keycloakUserService;
+
     @Override
     public String createCompte(CompteRequestDto requestDto) throws BadArgumentException {
         requestDto.validate();
@@ -33,6 +38,13 @@ public class CompteRepositoryImpl implements CompteRepositoryPort {
         compte.setNumeroCompte(CompteGenerateur.generateNumeroCompte(16));
         compte.setRib(CompteGenerateur.generateRIB());
         Compte savedCompte = repository.save(compte);
+
+        String firstName = requestDto.getPrenomTitulaire();
+        String lastName = requestDto.getNomTitulaire();
+        String email = requestDto.getEmailTitulaire();
+        String password = PasswordGenerator.generatePassword();
+        //create user in keycloak
+        keycloakUserService.createUserCredKeycloak(firstName,lastName,email,password);
         return savedCompte.getNumeroCompte();
     }
 

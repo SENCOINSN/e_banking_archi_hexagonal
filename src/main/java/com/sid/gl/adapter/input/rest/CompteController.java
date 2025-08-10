@@ -7,6 +7,7 @@ import com.sid.gl.domain.port.input.CompteServiceUseCase;
 import com.sid.gl.exceptions.BadArgumentException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,11 +21,13 @@ public class CompteController {
     }
 
 
+    @PreAuthorize("hasRole('role_admin')")
     @PostMapping(value = "/create")
     public ResponseEntity<String> createCompte(@RequestBody final @Valid CompteRequestDto requestDto) throws BadArgumentException {
         return ResponseEntity.ok(compteServiceUseCase.createCompte(requestDto));
     }
 
+    @PreAuthorize("hasRole('role_admin')")
     @GetMapping(value = "/all")
     public ResponseEntity<DataResponse> getAllComptes(@RequestParam(value = "page", defaultValue = "0") int page,
                                                       @RequestParam(value = "size", defaultValue = "10") int size) {

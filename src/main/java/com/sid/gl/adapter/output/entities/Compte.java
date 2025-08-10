@@ -24,4 +24,9 @@ public class Compte extends BaseEntity {
     private String iban;
     private BigDecimal solde;
 
+    @Column(name = "keycloak_id",unique = true)
+    private String keycloakId;
+
+
+
 }

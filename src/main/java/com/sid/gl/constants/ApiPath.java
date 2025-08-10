@@ -9,4 +9,6 @@ public class ApiPath {
 
     public static final String URI_BUCKET = API_VERSION + "/user/download/";
     public static final String URI_DOWNLOAD_CSV = API_VERSION + "/admin/generate-csv";
+
+    private ApiPath() {}
 }
