@@ -8,6 +8,7 @@ import com.sid.gl.domain.dto.CompteRequestDto;
 import com.sid.gl.domain.dto.CompteResponseDto;
 import com.sid.gl.domain.dto.DataResponse;
 import com.sid.gl.domain.port.output.CompteRepositoryPort;
+import com.sid.gl.exceptions.BadArgumentException;
 import com.sid.gl.utils.CompteGenerateur;
 import com.sid.gl.utils.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
-
 
 import java.util.List;
 
@@ -32,7 +32,8 @@ public class CompteRepositoryImpl implements CompteRepositoryPort {
     private KeycloakUserService keycloakUserService;
 
     @Override
-    public String createCompte(CompteRequestDto requestDto) {
+    public String createCompte(CompteRequestDto requestDto) throws BadArgumentException {
+        requestDto.validate();
         Compte compte = EBankingMapper.mapToCompte(requestDto);
         compte.setNumeroCompte(CompteGenerateur.generateNumeroCompte(16));
         compte.setRib(CompteGenerateur.generateRIB());
@@ -58,12 +59,12 @@ public class CompteRepositoryImpl implements CompteRepositoryPort {
         List<CompteResponseDto> compteResponseDtos = comptePage.getContent().stream()
                 .map(EBankingMapper::mapToCompteResponseDto)
                 .toList();
-        return DataResponse.builder()
-                .content(compteResponseDtos)
-                .pageNo(comptePage.getNumber())
-                .pageSize(comptePage.getSize())
-                .totalElements(comptePage.getTotalElements())
-                .totalPages(comptePage.getTotalPages())
-                .build();
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setContent(compteResponseDtos);
+        dataResponse.setPageNo(comptePage.getNumber());
+        dataResponse.setPageSize(comptePage.getSize());
+        dataResponse.setTotalElements(comptePage.getTotalElements());
+        dataResponse.setTotalPages(comptePage.getTotalPages());
+        return dataResponse;
     }
 }

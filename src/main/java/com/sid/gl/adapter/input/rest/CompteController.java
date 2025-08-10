@@ -4,6 +4,7 @@ import com.sid.gl.constants.ApiPath;
 import com.sid.gl.domain.dto.CompteRequestDto;
 import com.sid.gl.domain.dto.DataResponse;
 import com.sid.gl.domain.port.input.CompteServiceUseCase;
+import com.sid.gl.exceptions.BadArgumentException;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,7 @@ public class CompteController {
 
     @PreAuthorize("hasRole('role_admin')")
     @PostMapping(value = "/create")
-    public ResponseEntity<String> createCompte(@RequestBody final @Valid CompteRequestDto requestDto) {
+    public ResponseEntity<String> createCompte(@RequestBody final @Valid CompteRequestDto requestDto) throws BadArgumentException {
         return ResponseEntity.ok(compteServiceUseCase.createCompte(requestDto));
     }
 
