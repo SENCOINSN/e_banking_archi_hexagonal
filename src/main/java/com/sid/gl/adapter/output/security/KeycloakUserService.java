@@ -71,9 +71,10 @@ public class KeycloakUserService {
         return KeycloakBuilder.builder()
                 .serverUrl(properties.getServerUrl())
                 .realm(properties.getRealm())
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .grantType(OAuth2Constants.PASSWORD)
+                .username(properties.getUsername())
+                .password(properties.getPassword())
                 .clientId(properties.getClientId())
-                .clientSecret(properties.getClientSecret())
                 .build();
     }
 

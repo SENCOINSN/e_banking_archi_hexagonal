@@ -14,4 +14,6 @@ public class KeyCloakProperties {
     private String realm;
     private String clientId;
     private String clientSecret;
+    private String username;
+    private String password;
 }
