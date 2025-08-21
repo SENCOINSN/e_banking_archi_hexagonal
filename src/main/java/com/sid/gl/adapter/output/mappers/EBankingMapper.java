@@ -35,11 +35,12 @@ public class EBankingMapper {
         CompteResponseDto dto = new CompteResponseDto();
 
         if (Objects.nonNull(compte)) {
-          dto.setNumeroCompte(compte.getNumeroCompte());
-          dto.setTypeCompte(compte.getTypeCompte().getDescription());
-          dto.setSolde(compte.getSolde());
-          dto.setDevise("CFA"); // Assuming CFA as the default currency
-          dto.setInfosTitulaire(mapToInfosTitulaireResponseDto(compte.getTitulaire()));
+            dto.setId(compte.getId());
+            dto.setNumeroCompte(compte.getNumeroCompte());
+            dto.setTypeCompte(compte.getTypeCompte().getDescription());
+            dto.setSolde(compte.getSolde());
+            dto.setDevise("CFA"); // Assuming CFA as the default currency
+            dto.setInfosTitulaire(mapToInfosTitulaireResponseDto(compte.getTitulaire()));
         }
         return dto;
     }

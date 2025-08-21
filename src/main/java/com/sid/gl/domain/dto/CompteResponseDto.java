@@ -2,6 +2,16 @@ package com.sid.gl.domain.dto;
 import java.math.BigDecimal;
 
 public class CompteResponseDto {
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String numeroCompte;
     private String typeCompte;
     private String devise;
